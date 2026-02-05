@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courting Proposal</title>
+    <link rel="stylesheet" href="ring.css">
+    <link rel="stylesheet" href="media.css">
+    
+    <style>
+        body { background: #fff1f3; flex-direction: column; height: 100vh; display: flex; justify-content: center; align-items: center; font-family: 'Arial', sans-serif; }
+        .contract-page {
+            background: white; padding: 40px; border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(179, 57, 81, 0.2);
+            text-align: center; max-width: 400px; border: 2px solid #b33951;
+            position: relative;
+        }
+        h1 { color: #b33951; }
+        .buttons { margin-top: 30px; display: flex; justify-content: center; gap: 20px; height: 50px; }
+        .btn { padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .yes-btn { background: #4CAF50; color: white; }
+        .no-btn { background: #f44336; color: white; position: absolute; }
+
+        .contract-page {
+            width: 90%;
+            max-width: 400px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="contract-page" id="main-content">
+        <h1>📜 Official Courting Contract</h1>
+        <p>By clicking "YES", you agree to undergo a trial period of infinite dates, sweet morning texts, and me trying to win your heart every single day. ❤️</p>
+        
+        <div class="buttons">
+            <button class="btn yes-btn" onclick="celebrate()">YES! ❤️</button>
+            <button class="btn no-btn" id="noBtn" onmouseover="runAway()" onclick="runAway()">NO</button>
+        </div>
+    </div>
+
+
+    <script>
+        function runAway() {
+            const btn = document.getElementById('noBtn');
+            const maxX = window.innerWidth - 100;
+            const maxY = window.innerHeight - 50;
+
+            const x = Math.random() * maxX;
+            const y = Math.random() * maxY;
+
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+            btn.style.position = 'fixed'; 
+            btn.style.zIndex = '999';
+        }
+
+        function celebrate() {
+    const music = document.getElementById("bgMusic");
+
+    if (music) {
+        music.volume = 0;
+        music.play().then(() => {
+            let fade = setInterval(() => {
+                if (music.volume < 0.6) {
+                    music.volume += 0.02;
+                } else {
+                    clearInterval(fade);
+                }
+            }, 100);
+        }).catch(() => {});
+    }
+
+    document.getElementById('main-content').innerHTML = `
+        <h1>🌹 It's Official!</h1>
+        <p>Application accepted! I promise to make you the happiest girl. ❤️</p>
+        <button class="btn yes-btn" onclick="window.location.href='ring.html'">
+            Open Gift 🎁
+        </button>
+    `;
+
+    document.body.style.background =
+        "radial-gradient(#ffb3c6, #ff8fa3)";
+}
+    </script>
+</body>
+</html>

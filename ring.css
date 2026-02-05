@@ -1,0 +1,276 @@
+body {
+    margin: 0;
+    height: 100vh;
+    background: linear-gradient(#ffd6e0, #ffb3c6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Comic Sans MS", cursive;
+    overflow: hidden;
+}
+
+.box-container {
+    position: relative;
+    width: 200px;
+    height: 160px;
+    cursor: pointer;
+    perspective: 1000px;
+}
+
+/* --- DETAILED WOOD BOX --- */
+.lid {
+    position: absolute;
+    width: 200px;
+    height: 80px;
+    background: linear-gradient(to bottom, #7a3a3a 0%, #4a2a18 100%),
+                repeating-linear-gradient(90deg, transparent, rgba(0,0,0,0.1) 2px, transparent 4px);
+    border-radius: 15px 15px 5px 5px;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    transform-origin: top center; 
+    transition: transform 0.8s ease, opacity 0.4s ease 0.3s;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5), inset 0 2px 2px rgba(255,255,255,0.2);
+}
+
+.latch {
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 15px;
+    background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728);
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+
+.base {
+    position: absolute;
+    width: 200px;
+    height: 90px;
+    background: #3d1a0a;
+    top: 80px;
+    border-radius: 2px 2px 20px 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4), inset 0 -5px 15px rgba(0,0,0,0.5);
+    z-index: 2;
+}
+
+.velvet {
+    position: absolute;
+    width: 184px;
+    height: 70px;
+    background: radial-gradient(circle at 50% 50%, #ff5c8a 0%, #8b0000 100%);
+    top: 85px;
+    left: 8px;
+    border-radius: 12px;
+    z-index: 3;
+}
+
+/* --- 3D DETAILED RING (SOFT APPEARANCE) --- */
+.ring {
+    position: absolute;
+    left: 50%;
+    top: 100px; 
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 6px solid #d4af37;
+    background: radial-gradient(circle, transparent 55%, #fcf6ba 65%, #bf953f 100%);
+    
+    /* Soft Initial State */
+    transform: translateX(-50%) scale(0.5);
+    opacity: 0; 
+    z-index: 5;
+    transform-style: preserve-3d;
+
+    /* Immediate Exit (Close) */
+    transition: none !important;
+}
+
+/* Diamond Detail */
+.ring::after {
+    content: '';
+    position: absolute;
+    top: -24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 16px;
+    background: linear-gradient(135deg, #ffffff 0%, #cae9ff 50%, #89cff0 100%);
+    clip-path: polygon(20% 0%, 80% 0%, 100% 40%, 50% 100%, 0% 40%);
+    filter: drop-shadow(0 0 8px white);
+}
+
+/* OPEN STATE (SOFT ENTRY) */
+.box-container.open .ring {
+    transform: translateX(-50%) translateY(-140px) scale(1.3);
+    opacity: 1;
+    /* 1.2s duration with 0.6s delay for soft appearance */
+    transition: transform 1.2s ease-out 0.6s, opacity 1.2s ease-out 0.6s !important;
+}
+
+.box-container.open .lid {
+    transform: rotateX(110deg) translateY(-40px);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* SPINNING STATE */
+@keyframes slowSpin {
+    from { transform: translateX(-50%) translateY(-140px) scale(1.3) rotateY(0deg); }
+    to { transform: translateX(-50%) translateY(-140px) scale(1.3) rotateY(360deg); }
+}
+
+.ring.spinning {
+    animation: slowSpin 5s linear infinite !important;
+}
+
+/* --- SPARKLE STYLES --- */
+.sparkle {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: white;
+    /* Creating a 4-pointed star shape */
+    clip-path: polygon(50% 0%, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0% 50%, 39% 39%);
+    opacity: 0;
+    z-index: 7;
+}
+
+/* Individual Sparkle Positions */
+.sparkle:nth-child(1) { top: -25px; left: -5px; }
+.sparkle:nth-child(2) { top: -10px; right: -10px; }
+.sparkle:nth-child(3) { top: -30px; left: 25px; }
+
+/* Open State Sparkle Animation */
+.box-container.open .sparkle {
+    /* Delay matches the ring's soft entry + a little extra */
+    transition: opacity 0.5s ease 1.8s;
+    animation: sparkleAnim 1.5s infinite ease-in-out 1.8s;
+    opacity: 1;
+}
+
+@keyframes sparkleAnim {
+    0%, 100% { transform: scale(0) rotate(0deg); opacity: 0; }
+    50% { transform: scale(1.2) rotate(90deg); opacity: 1; }
+}
+
+/* Immediate hide on close */
+.sparkle {
+    transition: none !important;
+}
+
+/* Ensure the sign-here button is hidden until the box opens */
+.contract-invite {
+    position: absolute;
+    bottom: -80px;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    background: #b33951;
+    color: white;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: bold;
+    opacity: 0;
+    /* Appears softly after the ring has finished rising */
+    transition: all 0.5s ease 2.5s; 
+    z-index: 20;
+}
+
+.box-container.open .contract-invite {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+}
+
+/* --- BACK BUTTON STYLING --- */
+.back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #b33951;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 8px 15px;
+    border: 2px solid #b33951;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    z-index: 50; /* Ensure it stays above other elements */
+}
+
+.back-btn:hover {
+    background: #b33951;
+    color: white;
+    transform: translateX(-5px); /* Slight slide effect on hover */
+}
+
+/* --- BUTTONS POSITIONED UNDER THE BOX --- */
+.choice-container {
+    position: absolute;
+    /* Move this further down so it is under the box base */
+    bottom: -140px; 
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 2.8s;
+    z-index: 30;
+}
+
+.box-container.open .choice-container {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+}
+
+/* --- THE CUTE PILL-SHAPED BUTTONS --- */
+.take-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); /* Pink Pastel */
+    color: white;
+    padding: 12px 24px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+    border-radius: 50px; /* Pill Shape */
+    
+    /* 3D "Squishy" Shadow */
+    box-shadow: 0 6px 0 #ff758f, 0 8px 15px rgba(255, 117, 143, 0.4);
+    
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: none;
+    cursor: pointer;
+}
+
+/* Hover Effect: Grow and Tilt */
+.take-btn:hover {
+    transform: scale(1.1) rotate(-3deg);
+    background: linear-gradient(135deg, #fecfef 0%, #ff9a9e 100%);
+    box-shadow: 0 8px 0 #ff758f, 0 12px 20px rgba(255, 117, 143, 0.5);
+}
+
+/* Click Effect: Squish Down */
+.take-btn:active {
+    transform: translateY(4px) scale(0.95);
+    box-shadow: 0 2px 0 #ff758f;
+}
+
+/* Cute OR text */
+.choice-container span {
+    font-weight: bold;
+    color: #ff4d6d;
+    font-size: 18px;
+    text-shadow: 1px 1px 0px white;
+}
+
+.no-btn {
+    background: #f44336;
+    color: white;
+    /* Use 'fixed' so it moves relative to the phone screen, not the container */
+    position: fixed; 
+    transition: all 0.1s ease; /* Makes the jump look smooth but fast */
+    touch-action: none; /* Prevents the phone from zooming while trying to click */
+}

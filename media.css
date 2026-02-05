@@ -1,0 +1,43 @@
+/* --- MOBILE RESPONSIVENESS --- */
+
+/* For tablets and phones (max-width 768px) */
+@media screen and (max-width: 768px) {
+    .box-container {
+        transform: scale(0.8); /* Shrinks the box slightly */
+    }
+
+    .back-btn {
+        top: 10px;
+        left: 10px;
+        font-size: 14px;
+        padding: 5px 12px;
+    }
+
+    .choice-container {
+        bottom: -160px; /* Moves buttons further down to avoid overlap */
+        flex-direction: column; /* Stacks buttons on top of each other */
+        gap: 10px;
+    }
+
+    .take-btn {
+        width: 150px; /* Wider buttons for easier thumb-tapping */
+        text-align: center;
+    }
+
+    .choice-container span {
+        display: none; /* Hide the "OR" text to save vertical space */
+    }
+}
+
+/* For small phones (max-width 480px) */
+@media screen and (max-width: 480px) {
+    .box-container {
+        transform: scale(0.7); /* Shrinks more for tiny screens */
+    }
+    
+    .contract-invite {
+        font-size: 12px;
+        padding: 10px 18px;
+        bottom: -70px;
+    }
+}

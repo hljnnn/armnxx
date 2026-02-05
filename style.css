@@ -1,0 +1,33 @@
+/* Ensure the sign-here button is hidden until the box opens */
+.contract-invite {
+    position: absolute;
+    bottom: -80px;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    background: #b33951;
+    color: white;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: bold;
+    opacity: 0;
+    /* Appears softly after the ring has finished rising */
+    transition: all 0.5s ease 2.5s; 
+    z-index: 20;
+}
+
+.box-container.open .contract-invite {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 77, 109, 0.7); }
+    70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(255, 77, 109, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 77, 109, 0); }
+}
+
+#musicBtn:hover {
+    transform: scale(1.15) rotate(5deg);
+    transition: 0.3s;
+}

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Congratulations! ❤️</title>
+    <link rel="stylesheet" href="ring.css">
+    <link rel="stylesheet" href="media.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #ffdeeb 0%, #ffafcc 100%);
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .congrats-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 50px;
+            border-radius: 30px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(255, 77, 109, 0.3);
+            border: 5px solid white;
+            z-index: 10;
+        }
+        h1 { color: #ff4d6d; font-size: 3rem; margin-bottom: 10px; }
+        p { color: #c9184a; font-size: 1.2rem; font-weight: bold; }
+        
+        /* Floating hearts for celebration */
+        .celebration-heart {
+            position: absolute;
+            bottom: -50px;
+            font-size: 24px;
+            animation: floatUp 4s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
+
+        .home-btn {
+            margin-top: 20px;
+            display: inline-block;
+            background: #ff4d6d;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 5px 0 #c9184a;
+            transition: 0.3s;
+        }
+        .home-btn:hover { transform: scale(1.1); background: #ff758f; }
+
+        .contract-page, .congrats-card {
+            width: 90%; /* Use 90% of screen width on mobile */
+            max-width: 400px; /* But don't get too big on desktop */
+            padding: 20px; /* Smaller padding for mobile */
+            box-sizing: border-box; /* Ensures padding doesn't break the width */
+}
+
+h1 {
+    font-size: 1.8rem; /* Scaled down heading */
+}
+
+p {
+    font-size: 1rem;
+}
+    </style>
+</head>
+<body>
+
+    <div class="congrats-card">
+        <h1>🌹 APPLICATION ACCEPTED! 🌹</h1>
+        <p>You've officially entered the Courting Phase!</p>
+        <p>Get ready for all the spoiled treatment you deserve.</p>
+        <p style="font-size: 40px;">🥰📜✨</p>
+        <a href="ring.html" class="home-btn">See My Promise Again 🎀</a>
+    </div>
+
+     <audio id="bgMusic" loop preload="auto">
+        <source src="paraluman.mp3" type="audio/mpeg">
+    </audio>
+</div>
+
+    <script>
+        // Create random floating hearts
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('celebration-heart');
+            heart.innerHTML = ['❤️', '💖', '💕', '✨', '🌸'][Math.floor(Math.random() * 5)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            document.body.appendChild(heart);
+            
+            setTimeout(() => { heart.remove(); }, 4000);
+        }
+        setInterval(createHeart, 200);
+        const music = document.getElementById("bgMusic");
+
+const time = localStorage.getItem("musicTime");
+const playing = localStorage.getItem("musicPlaying") === "true";
+
+if (time !== null && playing) {
+    music.currentTime = parseFloat(time);
+    music.volume = 0.6;
+    music.play().catch(() => {});
+}
+
+window.addEventListener("beforeunload", () => {
+    localStorage.setItem("musicTime", music.currentTime);
+    localStorage.setItem("musicPlaying", !music.paused);
+});
+    </script>
+</body>
+</html>
