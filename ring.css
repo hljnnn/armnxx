@@ -1,276 +1,208 @@
-body {
-    margin: 0;
-    height: 100vh;
-    background: linear-gradient(#ffd6e0, #ffb3c6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: "Comic Sans MS", cursive;
-    overflow: hidden;
+/* ================================================
+   RING BOX — ring.css
+   ================================================ */
+
+/* ── Box scene ── */
+.box-scene {
+  position:relative;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  z-index:10;
 }
 
 .box-container {
-    position: relative;
-    width: 200px;
-    height: 160px;
-    cursor: pointer;
-    perspective: 1000px;
+  position:relative;
+  width:220px; height:180px;
+  cursor:pointer;
+  perspective:1200px;
+  margin:0 auto;
 }
 
-/* --- DETAILED WOOD BOX --- */
+/* ── LID ── */
 .lid {
-    position: absolute;
-    width: 200px;
-    height: 80px;
-    background: linear-gradient(to bottom, #7a3a3a 0%, #4a2a18 100%),
-                repeating-linear-gradient(90deg, transparent, rgba(0,0,0,0.1) 2px, transparent 4px);
-    border-radius: 15px 15px 5px 5px;
-    top: 0;
-    left: 0;
-    z-index: 10;
-    transform-origin: top center; 
-    transition: transform 0.8s ease, opacity 0.4s ease 0.3s;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.5), inset 0 2px 2px rgba(255,255,255,0.2);
+  position:absolute;
+  width:220px; height:85px;
+  background:
+    repeating-linear-gradient(
+      90deg, transparent 0, rgba(255,255,255,.08) 2px, transparent 4px
+    ),
+    linear-gradient(160deg, #7a3a3a 0%, #5a2020 60%, #3d1010 100%);
+  border-radius:18px 18px 6px 6px;
+  top:0; left:0; z-index:10;
+  transform-origin:top center;
+  transition:transform .85s cubic-bezier(.4,0,.2,1), opacity .5s ease .25s;
+  box-shadow:0 6px 14px rgba(0,0,0,.45), inset 0 2px 3px rgba(255,255,255,.18);
 }
 
 .latch {
-    position: absolute;
-    bottom: 5px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 30px;
-    height: 15px;
-    background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728);
-    border-radius: 3px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  position:absolute; bottom:6px; left:50%; transform:translateX(-50%);
+  width:32px; height:16px;
+  background:linear-gradient(135deg,var(--gold-light),var(--gold),var(--gold-dark));
+  border-radius:4px; box-shadow:0 2px 5px rgba(0,0,0,.35);
+}
+.latch::before {
+  content:''; position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:10px; height:10px; border-radius:50%;
+  background:linear-gradient(135deg,#fff9d6,var(--gold));
+  box-shadow:0 1px 3px rgba(0,0,0,.3);
 }
 
+/* ── BASE ── */
 .base {
-    position: absolute;
-    width: 200px;
-    height: 90px;
-    background: #3d1a0a;
-    top: 80px;
-    border-radius: 2px 2px 20px 20px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.4), inset 0 -5px 15px rgba(0,0,0,0.5);
-    z-index: 2;
+  position:absolute;
+  width:220px; height:100px; top:88px;
+  background:linear-gradient(160deg,#5a2020,#3d1010);
+  border-radius:4px 4px 22px 22px;
+  box-shadow:0 12px 28px rgba(0,0,0,.4),inset 0 -6px 18px rgba(0,0,0,.45);
+  z-index:2;
 }
 
+/* ribbon horizontal */
+.base::before {
+  content:''; position:absolute; left:0; right:0; top:50%; height:20px;
+  background:linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,.08));
+  transform:translateY(-50%);
+}
+/* ribbon vertical */
+.base::after {
+  content:''; position:absolute; top:0; bottom:0; left:50%; width:20px;
+  background:linear-gradient(90deg,rgba(255,255,255,.18),rgba(255,255,255,.08));
+  transform:translateX(-50%);
+}
+
+/* ── VELVET INSERT ── */
 .velvet {
-    position: absolute;
-    width: 184px;
-    height: 70px;
-    background: radial-gradient(circle at 50% 50%, #ff5c8a 0%, #8b0000 100%);
-    top: 85px;
-    left: 8px;
-    border-radius: 12px;
-    z-index: 3;
+  position:absolute;
+  width:200px; height:80px; top:92px; left:10px;
+  background:radial-gradient(ellipse at 50% 40%, #ff8fa3 0%, #9b1c36 70%, #6a0e24 100%);
+  border-radius:14px; z-index:3;
+  box-shadow:inset 0 4px 12px rgba(0,0,0,.3);
 }
 
-/* --- 3D DETAILED RING (SOFT APPEARANCE) --- */
+/* ── RING ── */
 .ring {
-    position: absolute;
-    left: 50%;
-    top: 100px; 
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    border: 6px solid #d4af37;
-    background: radial-gradient(circle, transparent 55%, #fcf6ba 65%, #bf953f 100%);
-    
-    /* Soft Initial State */
-    transform: translateX(-50%) scale(0.5);
-    opacity: 0; 
-    z-index: 5;
-    transform-style: preserve-3d;
-
-    /* Immediate Exit (Close) */
-    transition: none !important;
+  position:absolute;
+  left:50%; top:110px;
+  width:64px; height:64px;
+  border-radius:50%;
+  border:7px solid;
+  border-color:var(--gold);
+  background:
+    radial-gradient(circle at 35% 35%, rgba(255,255,255,.6) 0%, transparent 60%),
+    conic-gradient(from 0deg, var(--gold-dark), var(--gold-light), var(--gold), var(--gold-dark));
+  transform:translateX(-50%) scale(.4);
+  opacity:0; z-index:8;
+  transform-style:preserve-3d;
+  transition:none !important;
+  box-shadow:0 0 0 2px rgba(212,175,55,.3);
 }
 
-/* Diamond Detail */
+/* Diamond */
 .ring::after {
-    content: '';
-    position: absolute;
-    top: -24px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 24px;
-    height: 16px;
-    background: linear-gradient(135deg, #ffffff 0%, #cae9ff 50%, #89cff0 100%);
-    clip-path: polygon(20% 0%, 80% 0%, 100% 40%, 50% 100%, 0% 40%);
-    filter: drop-shadow(0 0 8px white);
+  content:'💎';
+  position:absolute; top:-30px; left:50%; transform:translateX(-50%);
+  font-size:1.5rem; filter:drop-shadow(0 0 10px rgba(180,230,255,.9));
 }
 
-/* OPEN STATE (SOFT ENTRY) */
-.box-container.open .ring {
-    transform: translateX(-50%) translateY(-140px) scale(1.3);
-    opacity: 1;
-    /* 1.2s duration with 0.6s delay for soft appearance */
-    transition: transform 1.2s ease-out 0.6s, opacity 1.2s ease-out 0.6s !important;
+/* Sheen on ring band */
+.ring::before {
+  content:''; position:absolute; inset:-1px; border-radius:50%;
+  background:conic-gradient(from 60deg, rgba(255,255,255,.55) 0%, transparent 30%, rgba(255,255,255,.2) 50%, transparent 70%);
+  pointer-events:none;
 }
 
+/* ── OPEN STATE ── */
 .box-container.open .lid {
-    transform: rotateX(110deg) translateY(-40px);
-    opacity: 0;
-    pointer-events: none;
+  transform:rotateX(115deg) translateY(-45px);
+  opacity:0; pointer-events:none;
+}
+.box-container.open .ring {
+  transform:translateX(-50%) translateY(-155px) scale(1.4);
+  opacity:1;
+  transition:transform 1.3s cubic-bezier(.2,.8,.3,1) .55s, opacity 1.1s ease .55s !important;
 }
 
-/* SPINNING STATE */
-@keyframes slowSpin {
-    from { transform: translateX(-50%) translateY(-140px) scale(1.3) rotateY(0deg); }
-    to { transform: translateX(-50%) translateY(-140px) scale(1.3) rotateY(360deg); }
+/* ── SPIN STATE ── */
+@keyframes ringFloat {
+  0%   { transform:translateX(-50%) translateY(-155px) scale(1.4) rotateY(0deg); }
+  100% { transform:translateX(-50%) translateY(-155px) scale(1.4) rotateY(360deg); }
 }
+.ring.spinning { animation:ringFloat 4s linear infinite !important; }
 
-.ring.spinning {
-    animation: slowSpin 5s linear infinite !important;
-}
-
-/* --- SPARKLE STYLES --- */
+/* ── SPARKLES ── */
 .sparkle {
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    background: white;
-    /* Creating a 4-pointed star shape */
-    clip-path: polygon(50% 0%, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0% 50%, 39% 39%);
-    opacity: 0;
-    z-index: 7;
+  position:absolute; width:12px; height:12px;
+  background:white;
+  clip-path:polygon(50% 0%,61% 38%,100% 50%,61% 62%,50% 100%,39% 62%,0% 50%,39% 38%);
+  opacity:0; z-index:9;
 }
+.sparkle:nth-child(1) { top:-32px; left:-8px;  width:10px; height:10px; }
+.sparkle:nth-child(2) { top:-18px; right:-14px; width:14px; height:14px; }
+.sparkle:nth-child(3) { top:-38px; left:22px;  width:8px;  height:8px;  }
+.sparkle:nth-child(4) { top:-10px; left:-20px;  width:8px;  height:8px; }
 
-/* Individual Sparkle Positions */
-.sparkle:nth-child(1) { top: -25px; left: -5px; }
-.sparkle:nth-child(2) { top: -10px; right: -10px; }
-.sparkle:nth-child(3) { top: -30px; left: 25px; }
-
-/* Open State Sparkle Animation */
 .box-container.open .sparkle {
-    /* Delay matches the ring's soft entry + a little extra */
-    transition: opacity 0.5s ease 1.8s;
-    animation: sparkleAnim 1.5s infinite ease-in-out 1.8s;
-    opacity: 1;
+  animation:sparkleAnim 1.8s ease-in-out infinite 1.8s;
+  opacity:1;
 }
-
 @keyframes sparkleAnim {
-    0%, 100% { transform: scale(0) rotate(0deg); opacity: 0; }
-    50% { transform: scale(1.2) rotate(90deg); opacity: 1; }
+  0%,100% { transform:scale(0) rotate(0deg);   opacity:0; }
+  50%     { transform:scale(1.3) rotate(90deg); opacity:1; }
 }
 
-/* Immediate hide on close */
-.sparkle {
-    transition: none !important;
+/* ── OPEN HINT ── */
+.open-hint {
+  margin-top:18px; font-family:'Nunito',sans-serif;
+  font-size:.8rem; color:rgba(201,24,74,.6);
+  letter-spacing:.12em; text-transform:uppercase; font-weight:700;
+  animation:hintBlink 2s ease-in-out infinite;
 }
+@keyframes hintBlink { 0%,100%{opacity:.4} 50%{opacity:1} }
+.box-container.open ~ .open-hint { opacity:0; pointer-events:none; transition:opacity .3s; }
 
-/* Ensure the sign-here button is hidden until the box opens */
-.contract-invite {
-    position: absolute;
-    bottom: -80px;
-    left: 50%;
-    transform: translateX(-50%) scale(0);
-    background: #b33951;
-    color: white;
-    padding: 12px 24px;
-    text-decoration: none;
-    border-radius: 50px;
-    font-weight: bold;
-    opacity: 0;
-    /* Appears softly after the ring has finished rising */
-    transition: all 0.5s ease 2.5s; 
-    z-index: 20;
-}
-
-.box-container.open .contract-invite {
-    transform: translateX(-50%) scale(1);
-    opacity: 1;
-}
-
-/* --- BACK BUTTON STYLING --- */
-.back-btn {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    color: #b33951;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 16px;
-    padding: 8px 15px;
-    border: 2px solid #b33951;
-    border-radius: 20px;
-    transition: all 0.3s ease;
-    z-index: 50; /* Ensure it stays above other elements */
-}
-
-.back-btn:hover {
-    background: #b33951;
-    color: white;
-    transform: translateX(-5px); /* Slight slide effect on hover */
-}
-
-/* --- BUTTONS POSITIONED UNDER THE BOX --- */
+/* ── CHOICE BUTTONS ── */
 .choice-container {
-    position: absolute;
-    /* Move this further down so it is under the box base */
-    bottom: -140px; 
-    left: 50%;
-    transform: translateX(-50%) scale(0);
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    opacity: 0;
-    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 2.8s;
-    z-index: 30;
+  margin-top:30px;
+  display:flex; align-items:center; gap:16px;
+  opacity:0; transform:translateY(14px) scale(.9);
+  transition:all .5s cubic-bezier(.2,.8,.3,1) 2.8s;
+  pointer-events:none;
+}
+.box-container.open ~ .open-hint ~ .choice-container,
+.choice-wrap .choice-container {
+  opacity:0;
+}
+.choice-visible {
+  opacity:1 !important;
+  transform:translateY(0) scale(1) !important;
+  pointer-events:all !important;
 }
 
-.box-container.open .choice-container {
-    transform: translateX(-50%) scale(1);
-    opacity: 1;
-}
-
-/* --- THE CUTE PILL-SHAPED BUTTONS --- */
 .take-btn {
-    display: inline-block;
-    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); /* Pink Pastel */
-    color: white;
-    padding: 12px 24px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 16px;
-    border-radius: 50px; /* Pill Shape */
-    
-    /* 3D "Squishy" Shadow */
-    box-shadow: 0 6px 0 #ff758f, 0 8px 15px rgba(255, 117, 143, 0.4);
-    
-    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border: none;
-    cursor: pointer;
+  display:inline-block;
+  background:linear-gradient(135deg,#ffb3c6 0%,#ff758f 100%);
+  color:white; padding:13px 26px;
+  text-decoration:none; font-weight:800; font-size:.97rem;
+  border-radius:50px; border:none; cursor:pointer;
+  box-shadow:0 6px 0 #e05070,0 10px 24px rgba(255,117,143,.4);
+  transition:all .22s cubic-bezier(.2,.8,.3,1);
+  font-family:'Nunito',sans-serif;
+}
+.take-btn:hover  { transform:translateY(-3px) scale(1.06) rotate(-2deg); box-shadow:0 9px 0 #e05070,0 14px 30px rgba(255,117,143,.5); }
+.take-btn:active { transform:translateY(3px) scale(.96); box-shadow:0 2px 0 #e05070; }
+
+.heart-sep { font-size:1.2rem; animation:heartBeat 1.2s ease-in-out infinite; }
+@keyframes heartBeat {
+  0%,100%{transform:scale(1)}  50%{transform:scale(1.3)}
 }
 
-/* Hover Effect: Grow and Tilt */
-.take-btn:hover {
-    transform: scale(1.1) rotate(-3deg);
-    background: linear-gradient(135deg, #fecfef 0%, #ff9a9e 100%);
-    box-shadow: 0 8px 0 #ff758f, 0 12px 20px rgba(255, 117, 143, 0.5);
+/* ── BACK BUTTON ── */
+.back-btn {
+  position:fixed; top:16px; left:16px; z-index:100;
+  color:var(--rose-dark); text-decoration:none; font-weight:800;
+  font-size:.85rem; padding:8px 16px;
+  border:2px solid var(--rose-light); border-radius:50px;
+  background:rgba(255,255,255,.85); backdrop-filter:blur(8px);
+  transition:all .25s;
 }
-
-/* Click Effect: Squish Down */
-.take-btn:active {
-    transform: translateY(4px) scale(0.95);
-    box-shadow: 0 2px 0 #ff758f;
-}
-
-/* Cute OR text */
-.choice-container span {
-    font-weight: bold;
-    color: #ff4d6d;
-    font-size: 18px;
-    text-shadow: 1px 1px 0px white;
-}
-
-.no-btn {
-    background: #f44336;
-    color: white;
-    /* Use 'fixed' so it moves relative to the phone screen, not the container */
-    position: fixed; 
-    transition: all 0.1s ease; /* Makes the jump look smooth but fast */
-    touch-action: none; /* Prevents the phone from zooming while trying to click */
-}
+.back-btn:hover { background:var(--rose-dark); color:white; border-color:var(--rose-dark); transform:translateX(-3px); }
