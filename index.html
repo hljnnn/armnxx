@@ -1,89 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Courting Proposal</title>
-    <link rel="stylesheet" href="ring.css">
-    <link rel="stylesheet" href="media.css">
-    
-    <style>
-        body { background: #fff1f3; flex-direction: column; height: 100vh; display: flex; justify-content: center; align-items: center; font-family: 'Arial', sans-serif; }
-        .contract-page {
-            background: white; padding: 40px; border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(179, 57, 81, 0.2);
-            text-align: center; max-width: 400px; border: 2px solid #b33951;
-            position: relative;
-        }
-        h1 { color: #b33951; }
-        .buttons { margin-top: 30px; display: flex; justify-content: center; gap: 20px; height: 50px; }
-        .btn { padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .yes-btn { background: #4CAF50; color: white; }
-        .no-btn { background: #f44336; color: white; position: absolute; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Official Courting Contract 📜</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="media.css">
+  <style>
+    body { background:linear-gradient(135deg,#ffe0e9 0%,#ffc2d1 60%,#ffb3c6 100%); }
 
-        .contract-page {
-            width: 90%;
-            max-width: 400px;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-    </style>
+    /* ── Contract text ── */
+    .contract-text {
+      background:linear-gradient(180deg,#fff9fa,#fff0f5);
+      border:1.5px solid #ffd6e4;
+      border-radius:16px; padding:18px 20px; margin:18px 0;
+      text-align:left; position:relative;
+    }
+    .contract-text::before {
+      content:'📜';
+      position:absolute; top:-14px; left:50%; transform:translateX(-50%);
+      font-size:1.4rem; background:white; padding:0 4px; border-radius:50%;
+    }
+    .contract-item {
+      display:flex; align-items:flex-start; gap:10px;
+      padding:6px 0; font-size:.88rem; color:#7a2040;
+      border-bottom:1px dashed #ffd6e4;
+    }
+    .contract-item:last-child { border-bottom:none; }
+    .contract-item .check { font-size:1rem; flex-shrink:0; margin-top:1px; }
+
+    /* ── Seal ── */
+    .seal {
+      width:72px; height:72px; border-radius:50%;
+      background:radial-gradient(circle at 38% 36%,#ff758f,#c9184a);
+      border:3px solid #fff; box-shadow:0 4px 16px rgba(201,24,74,.35);
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.8rem; margin:14px auto 0;
+      animation:sealWobble 3s ease-in-out infinite;
+    }
+    @keyframes sealWobble { 0%,100%{transform:rotate(-4deg)} 50%{transform:rotate(4deg)} }
+
+    /* No button fixed position */
+    #noBtn { padding:13px 24px; border-radius:50px; border:none; cursor:pointer; font-family:'Nunito',sans-serif; font-weight:800; font-size:.95rem; }
+  </style>
 </head>
 <body>
 
-    <div class="contract-page" id="main-content">
-        <h1>📜 Official Courting Contract</h1>
-        <p>By clicking "YES", you agree to undergo a trial period of infinite dates, sweet morning texts, and me trying to win your heart every single day. ❤️</p>
-        
-        <div class="buttons">
-            <button class="btn yes-btn" onclick="celebrate()">YES! ❤️</button>
-            <button class="btn no-btn" id="noBtn" onmouseover="runAway()" onclick="runAway()">NO</button>
-        </div>
-    </div>
+<!-- Petal rain -->
+<div class="petal-container" id="petals"></div>
 
+<!-- Audio -->
+<audio id="bgMusic" loop preload="auto">
+  <source src="paraluman.mp3" type="audio/mpeg">
+</audio>
 
-    <script>
-        function runAway() {
-            const btn = document.getElementById('noBtn');
-            const maxX = window.innerWidth - 100;
-            const maxY = window.innerHeight - 50;
+<div class="card" id="main-content">
+  <div class="stamp">Official Document</div>
+  <h1>📜 Courting Contract</h1>
+  <div class="divider"></div>
 
-            const x = Math.random() * maxX;
-            const y = Math.random() * maxY;
+  <p>By pressing <strong style="color:#c9184a">YES</strong>, you agree to:</p>
 
-            btn.style.left = x + 'px';
-            btn.style.top = y + 'px';
-            btn.style.position = 'fixed'; 
-            btn.style.zIndex = '999';
-        }
+  <div class="contract-text">
+    <div class="contract-item"><span class="check">🌹</span><span>Receive infinite dates, sweet morning texts &amp; random acts of love.</span></div>
+    <div class="contract-item"><span class="check">💌</span><span>Be spoiled with all the care and attention you truly deserve.</span></div>
+    <div class="contract-item"><span class="check">🎀</span><span>Allow me to try and win your heart every. single. day.</span></div>
+    <div class="contract-item"><span class="check">✨</span><span>Undergo a trial period of happiness, laughter &amp; magic.</span></div>
+  </div>
 
-        function celebrate() {
-    const music = document.getElementById("bgMusic");
+  <p style="font-size:.82rem;opacity:.7;margin-top:4px;">This agreement is valid for: <strong>forever</strong></p>
 
-    if (music) {
-        music.volume = 0;
-        music.play().then(() => {
-            let fade = setInterval(() => {
-                if (music.volume < 0.6) {
-                    music.volume += 0.02;
-                } else {
-                    clearInterval(fade);
-                }
-            }, 100);
-        }).catch(() => {});
-    }
+  <div class="seal">💝</div>
 
-    document.getElementById('main-content').innerHTML = `
-        <h1>🌹 It's Official!</h1>
-        <p>Application accepted! I promise to make you the happiest girl. ❤️</p>
-        <button class="btn yes-btn" onclick="window.location.href='ring.html'">
-            Open Gift 🎁
-        </button>
-    `;
+  <div class="btn-row">
+    <button class="btn btn-yes" onclick="celebrate()">YES! ❤️</button>
+    <button class="btn btn-no" id="noBtn"
+      onmouseover="runAway()"
+      ontouchstart="runAway()"
+      onclick="runAway()">NO 🙈</button>
+  </div>
+</div>
 
-    document.body.style.background =
-        "radial-gradient(#ffb3c6, #ff8fa3)";
+<script>
+/* ── Petal rain ── */
+const PETALS = ['🌸','🌹','💕','✨','🌷','💖','🎀'];
+function spawnPetal() {
+  const el = document.createElement('div');
+  el.className = 'petal';
+  el.textContent = PETALS[Math.floor(Math.random() * PETALS.length)];
+  el.style.left = Math.random() * 100 + 'vw';
+  el.style.fontSize = (.7 + Math.random() * .7) + 'rem';
+  const dur = 8 + Math.random() * 8;
+  el.style.animationDuration = dur + 's';
+  el.style.animationDelay = Math.random() * 4 + 's';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), (dur + 5) * 1000);
 }
-    </script>
+for (let i = 0; i < 14; i++) spawnPetal();
+setInterval(spawnPetal, 2200);
+
+/* ── NO button runs away ── */
+function runAway() {
+  const btn = document.getElementById('noBtn');
+  const margin = 60;
+  const x = margin + Math.random() * (window.innerWidth  - margin * 2 - 80);
+  const y = margin + Math.random() * (window.innerHeight - margin * 2 - 50);
+  btn.style.left = x + 'px';
+  btn.style.top  = y + 'px';
+  btn.style.position = 'fixed';
+  btn.style.zIndex   = '999';
+}
+
+/* ── YES ── */
+function celebrate() {
+  const music = document.getElementById('bgMusic');
+  if (music) {
+    music.volume = 0; music.play().catch(() => {});
+    const fade = setInterval(() => {
+      if (music.volume < 0.6) music.volume = Math.min(music.volume + .02, .6);
+      else clearInterval(fade);
+    }, 100);
+    localStorage.setItem('musicPlaying', 'true');
+    localStorage.setItem('musicTime', '0');
+  }
+
+  document.getElementById('main-content').innerHTML = `
+    <div class="stamp">Application Accepted! 🎉</div>
+    <h1 style="color:#c9184a">It's Official! 🌹</h1>
+    <div class="divider"></div>
+    <span class="big-emoji">🥰</span>
+    <p>Application accepted!<br>I promise to make you the happiest girl every single day.</p>
+    <p style="margin-top:10px;font-size:1.4rem">💌 ✨ 🎀</p>
+    <div class="btn-row" style="margin-top:24px">
+      <a href="ring.html" class="btn btn-yes">Open Your Gift 🎁</a>
+    </div>
+  `;
+  document.body.style.background = 'radial-gradient(circle at 50% 40%, #ffb3c6, #ff8fa3)';
+  launchConfetti();
+}
+
+function launchConfetti() {
+  const PIECES = ['🌸','💖','✨','🌹','🎀','💕'];
+  for (let i = 0; i < 30; i++) {
+    setTimeout(() => {
+      const p = document.createElement('div');
+      p.style.cssText = `
+        position:fixed; z-index:999; pointer-events:none;
+        font-size:${.9+Math.random()*.8}rem;
+        left:${10+Math.random()*80}vw;
+        top:${5+Math.random()*50}vh;
+        animation:confettiFall ${1.2+Math.random()*.7}s ease forwards;
+      `;
+      p.textContent = PIECES[Math.floor(Math.random()*PIECES.length)];
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 2000);
+    }, i * 60);
+  }
+}
+</script>
+<style>
+@keyframes confettiFall {
+  from { opacity:1; transform:translateY(0) rotate(0deg) scale(1); }
+  to   { opacity:0; transform:translateY(90px) rotate(400deg) scale(.4); }
+}
+</style>
 </body>
 </html>
