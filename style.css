@@ -1,33 +1,122 @@
-/* Ensure the sign-here button is hidden until the box opens */
-.contract-invite {
-    position: absolute;
-    bottom: -80px;
-    left: 50%;
-    transform: translateX(-50%) scale(0);
-    background: #b33951;
-    color: white;
-    padding: 12px 24px;
-    text-decoration: none;
-    border-radius: 50px;
-    font-weight: bold;
-    opacity: 0;
-    /* Appears softly after the ring has finished rising */
-    transition: all 0.5s ease 2.5s; 
-    z-index: 20;
+/* ================================================
+   COURTING PROPOSAL SYSTEM — style.css
+   Theme: Soft Rose · Cute · Romantic
+   ================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Nunito:wght@300;400;600;700;800&display=swap');
+
+:root {
+  --rose:        #ff4d6d;
+  --rose-dark:   #c9184a;
+  --rose-light:  #ff758f;
+  --blush:       #ffb3c6;
+  --blush-pale:  #fff0f3;
+  --cream:       #fff9fa;
+  --gold:        #d4af37;
+  --gold-light:  #f5e196;
+  --gold-dark:   #a0791a;
+  --text:        #4a1020;
+  --text-soft:   #8a3050;
+  --white:       #ffffff;
+  --shadow:      rgba(201,24,74,.18);
 }
 
-.box-container.open .contract-invite {
-    transform: translateX(-50%) scale(1);
-    opacity: 1;
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: linear-gradient(135deg, #ffe0e9 0%, #ffc2d1 50%, #ffb3c6 100%);
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; position: relative;
 }
 
+/* ── Petal rain ── */
+.petal { position:fixed; pointer-events:none; z-index:1; opacity:0; font-size:1rem; animation:petalFall linear infinite; }
+@keyframes petalFall {
+  0%   { transform:translateY(-40px) rotate(0deg);   opacity:0; }
+  8%   { opacity:.65; }
+  92%  { opacity:.4; }
+  100% { transform:translateY(110vh) rotate(540deg); opacity:0; }
+}
+
+/* ── Card ── */
+.card {
+  position:relative; z-index:10;
+  background:var(--white);
+  border-radius:30px;
+  padding:44px 38px 38px;
+  box-shadow:
+    0 28px 70px var(--shadow),
+    0 0 0 6px rgba(255,255,255,.9),
+    0 0 0 10px rgba(255,179,198,.4);
+  width:90%; max-width:420px;
+  text-align:center;
+  animation:cardIn .75s cubic-bezier(.2,.8,.3,1) both;
+}
+@keyframes cardIn {
+  from { opacity:0; transform:translateY(32px) scale(.94); }
+  to   { opacity:1; transform:none; }
+}
+.card::before, .card::after { content:'🌸'; position:absolute; font-size:1.3rem; opacity:.6; }
+.card::before { top:14px; left:16px; }
+.card::after  { top:14px; right:16px; }
+
+/* ── Typography ── */
+h1 {
+  font-family:'Dancing Script',cursive;
+  font-size:clamp(1.8rem,7vw,2.6rem);
+  color:var(--rose-dark); line-height:1.15; margin-bottom:8px;
+}
+p { font-size:.97rem; color:var(--text-soft); line-height:1.65; margin:7px 0; }
+.big-emoji { font-size:2.6rem; display:block; margin:10px 0; }
+
+/* ── Divider ── */
+.divider { margin:14px auto; width:55px; height:3px; border-radius:3px; background:linear-gradient(90deg,transparent,var(--blush),transparent); }
+
+/* ── Stamp ── */
+.stamp {
+  display:inline-block; border:2.5px dashed var(--rose-light);
+  border-radius:10px; padding:5px 14px;
+  font-size:.7rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--rose); font-weight:800; margin-bottom:12px; background:var(--blush-pale);
+}
+
+/* ── Buttons ── */
+.btn {
+  display:inline-block; font-family:'Nunito',sans-serif;
+  font-weight:800; font-size:.97rem;
+  padding:14px 28px; border-radius:50px; border:none; cursor:pointer;
+  text-decoration:none; transition:all .22s cubic-bezier(.2,.8,.3,1);
+}
+.btn-yes {
+  background:linear-gradient(135deg,var(--rose) 0%,var(--rose-dark) 100%);
+  color:var(--white); box-shadow:0 7px 0 var(--rose-dark),0 10px 28px rgba(255,77,109,.35);
+}
+.btn-yes:hover  { transform:translateY(-3px) scale(1.05); box-shadow:0 10px 0 var(--rose-dark),0 16px 34px rgba(255,77,109,.4); }
+.btn-yes:active { transform:translateY(3px) scale(.97); box-shadow:0 2px 0 var(--rose-dark); }
+
+.btn-no {
+  background:linear-gradient(135deg,#fba6bb,#f48fb1);
+  color:var(--white); box-shadow:0 5px 0 #d0607a,0 8px 20px rgba(240,130,170,.3);
+  position:fixed; z-index:999; transition:none;
+}
+
+.btn-secondary {
+  background:linear-gradient(135deg,#ffd6e4,var(--blush));
+  color:var(--rose-dark); box-shadow:0 5px 0 var(--blush),0 8px 20px rgba(255,180,200,.3);
+}
+.btn-secondary:hover { transform:translateY(-2px) scale(1.04); box-shadow:0 7px 0 var(--blush),0 12px 24px rgba(255,180,200,.4); }
+
+/* ── Button row ── */
+.btn-row { margin-top:26px; display:flex; justify-content:center; gap:14px; align-items:center; min-height:56px; }
+
+/* ── Pulse animation ── */
 @keyframes pulse {
-    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 77, 109, 0.7); }
-    70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(255, 77, 109, 0); }
-    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 77, 109, 0); }
+  0%,100% { transform:scale(1); } 50% { transform:scale(1.06); }
 }
+.pulse { animation:pulse 1.8s ease-in-out infinite; }
 
-#musicBtn:hover {
-    transform: scale(1.15) rotate(5deg);
-    transition: 0.3s;
-}
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width:5px; }
+::-webkit-scrollbar-thumb { background:var(--blush); border-radius:3px; }
