@@ -1,42 +1,150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="ring.css">
-    <link rel="stylesheet" href="media.css">
-    <title>The Ring</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Promise Ring 💍</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="ring.css">
+  <link rel="stylesheet" href="media.css">
+  <style>
+    body {
+      background:linear-gradient(135deg,#ffe0e9 0%,#ffb3c6 50%,#ffd6e4 100%);
+      flex-direction:column; gap:0;
+    }
+
+    /* ── Page title ── */
+    .ring-title {
+      font-family:'Dancing Script',cursive;
+      font-size:clamp(1.5rem,5vw,2rem);
+      color:#c9184a;
+      text-align:center;
+      margin-bottom:8px;
+      z-index:10; position:relative;
+      text-shadow:0 2px 10px rgba(201,24,74,.2);
+      animation:titleFade 1s ease both;
+    }
+    @keyframes titleFade { from{opacity:0;transform:translateY(-12px)} to{opacity:1;transform:none} }
+
+    .ring-sub {
+      font-family:'Nunito',sans-serif; font-size:.82rem;
+      color:rgba(201,24,74,.6); text-align:center; letter-spacing:.1em;
+      text-transform:uppercase; font-weight:700;
+      z-index:10; position:relative; margin-bottom:20px;
+      animation:titleFade 1s ease .15s both;
+    }
+
+    /* ── Ring scene wrapper ── */
+    .ring-scene {
+      display:flex; flex-direction:column; align-items:center;
+      z-index:10; position:relative;
+      padding-bottom:200px; /* space for floating ring + buttons */
+    }
+
+    /* ── Sparkle burst on open ── */
+    .burst-sparkle {
+      position:fixed; pointer-events:none; z-index:999;
+      font-size:1.1rem; animation:burstFly .8s ease forwards;
+    }
+    @keyframes burstFly {
+      from { opacity:1; transform:translate(0,0) scale(1); }
+      to   { opacity:0; transform:translate(var(--tx),var(--ty)) scale(.2); }
+    }
+
+    /* ── Promise text (shows after open) ── */
+    .promise-text {
+      position:absolute;
+      bottom:-195px;
+      left:50%; transform:translateX(-50%);
+      width:260px; text-align:center;
+      background:rgba(255,255,255,.85); backdrop-filter:blur(10px);
+      border:1.5px solid rgba(255,179,198,.6);
+      border-radius:18px; padding:14px 18px;
+      font-family:'Dancing Script',cursive;
+      font-size:1.05rem; color:#c9184a; line-height:1.5;
+      opacity:0; transform:translateX(-50%) translateY(10px);
+      transition:opacity .6s ease 3.2s, transform .6s ease 3.2s;
+      z-index:8; pointer-events:none;
+      box-shadow:0 8px 24px rgba(201,24,74,.15);
+    }
+    .box-container.open ~ .promise-text,
+    .promise-text.show {
+      opacity:1; transform:translateX(-50%) translateY(0);
+    }
+
+    /* choice button positioning */
+    .choice-container {
+      position:absolute;
+      bottom:-165px; left:50%;
+      transform:translateX(-50%) scale(.85) translateY(10px);
+    }
+  </style>
 </head>
 <body>
 
+<div class="petal-container" id="petals"></div>
 <a href="index.html" class="back-btn">← Back</a>
 
-<div class="box-container" id="box">
+<audio id="bgMusic" loop preload="auto">
+  <source src="paraluman.mp3" type="audio/mpeg">
+</audio>
+
+<p class="ring-title">A Promise for You 💍</p>
+<p class="ring-sub">tap the box to reveal it</p>
+
+<div class="ring-scene">
+  <div class="box-container" id="box">
     <div class="lid"><div class="latch"></div></div>
     <div class="base"></div>
     <div class="velvet"></div>
 
     <div class="ring" id="ring">
-        <div class="sparkle"></div>
-        <div class="sparkle"></div>
-        <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
     </div>
 
-<div class="choice-container">
-        <a href="congrats.html" class="take-btn">Take It ✨</a>
-        <span style="color: #ff4d6d;">💕</span>
-        <a href="congrats.html" class="take-btn">Take It 🎀</a>
+    <!-- Promise card (fades in after ring rises) -->
+    <div class="promise-text" id="promise-text">
+      "I promise to love you<br>every single day." 🌹
     </div>
 
-
-    <audio id="bgMusic" loop preload="auto">
-        <source src="paraluman.mp3" type="audio/mpeg">
-    </audio>
-</div>
-
-
+    <div class="choice-container" id="choice-container">
+      <a href="congrats.html" class="take-btn">Take It ✨</a>
+      <span class="heart-sep">💕</span>
+      <a href="congrats.html" class="take-btn">Accept 🎀</a>
+    </div>
+  </div>
 </div>
 
 <script src="script.js"></script>
+<script>
+/* ── Petal rain ── */
+const PETALS = ['🌸','🌹','💕','✨','🌷','💖','🎀'];
+function spawnPetal() {
+  const el = document.createElement('div');
+  el.className = 'petal';
+  el.textContent = PETALS[Math.floor(Math.random() * PETALS.length)];
+  el.style.left = Math.random() * 100 + 'vw';
+  el.style.fontSize = (.65 + Math.random() * .65) + 'rem';
+  const dur = 8 + Math.random() * 9;
+  el.style.animationDuration = dur + 's';
+  el.style.animationDelay = Math.random() * 5 + 's';
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), (dur + 5) * 1000);
+}
+for (let i = 0; i < 14; i++) spawnPetal();
+setInterval(spawnPetal, 2400);
+
+/* ── Show choice buttons after box opens ── */
+document.addEventListener('boxOpened', () => {
+  setTimeout(() => {
+    const cc = document.getElementById('choice-container');
+    if (cc) cc.classList.add('choice-visible');
+    document.getElementById('promise-text').classList.add('show');
+  }, 2900);
+});
+</script>
 </body>
 </html>
