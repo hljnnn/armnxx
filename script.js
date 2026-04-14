@@ -1,84 +1,118 @@
-const box = document.getElementById("box");
-const ring = document.getElementById("ring");
-const music = document.getElementById("bgMusic");
+/* ================================================
+   COURTING PROPOSAL — script.js
+   Ring box · Music manager · Interactions
+   ================================================ */
+
+const box   = document.getElementById('box');
+const ring  = document.getElementById('ring');
+const music = document.getElementById('bgMusic');
 
 let fadeInterval;
 
-/* -------- MUSIC FADE -------- */
-function fadeIn(audio, targetVolume = 0.6) {
-    clearInterval(fadeInterval);
-    audio.volume = 0;
-    audio.play().catch(() => {});
-    fadeInterval = setInterval(() => {
-        if (audio.volume < targetVolume) {
-            audio.volume = Math.min(audio.volume + 0.02, targetVolume);
-        } else {
-            clearInterval(fadeInterval);
-        }
-    }, 100);
+/* ── Music: fade in ── */
+function fadeIn(audio, target = 0.6) {
+  clearInterval(fadeInterval);
+  audio.volume = 0;
+  audio.play().catch(() => {});
+  fadeInterval = setInterval(() => {
+    if (audio.volume < target - .01) {
+      audio.volume = Math.min(audio.volume + .02, target);
+    } else {
+      audio.volume = target;
+      clearInterval(fadeInterval);
+    }
+  }, 80);
 }
 
+/* ── Music: fade out ── */
 function fadeOut(audio) {
-    clearInterval(fadeInterval);
-    fadeInterval = setInterval(() => {
-        if (audio.volume > 0.02) {
-            audio.volume -= 0.02;
-        } else {
-            audio.pause();
-            audio.volume = 0;
-            clearInterval(fadeInterval);
-        }
-    }, 100);
+  clearInterval(fadeInterval);
+  fadeInterval = setInterval(() => {
+    if (audio.volume > .022) {
+      audio.volume = Math.max(audio.volume - .02, 0);
+    } else {
+      audio.pause();
+      audio.volume = 0;
+      clearInterval(fadeInterval);
+    }
+  }, 80);
 }
 
-/* -------- SAVE MUSIC STATE -------- */
+/* ── Music: save & restore state ── */
 function saveMusicState() {
-    if (!music) return;
-    localStorage.setItem("musicTime", music.currentTime);
-    localStorage.setItem("musicPlaying", !music.paused);
+  if (!music) return;
+  localStorage.setItem('musicTime',    music.currentTime);
+  localStorage.setItem('musicPlaying', !music.paused);
 }
 
-/* -------- RESTORE MUSIC STATE -------- */
 function restoreMusicState() {
-    if (!music) return;
-
-    const time = localStorage.getItem("musicTime");
-    const playing = localStorage.getItem("musicPlaying") === "true";
-
-    if (time !== null) {
-        music.currentTime = parseFloat(time);
-    }
-
-    if (playing) {
-        music.volume = 0.6;
-        music.play().catch(() => {});
-    }
+  if (!music) return;
+  const time    = localStorage.getItem('musicTime');
+  const playing = localStorage.getItem('musicPlaying') === 'true';
+  if (time)    music.currentTime = parseFloat(time);
+  if (playing) { music.volume = 0.6; music.play().catch(() => {}); }
 }
 
-/* -------- BOX & RING -------- */
+/* ── Box interaction ── */
 if (box && ring && music) {
-    restoreMusicState();
+  restoreMusicState();
 
-    box.addEventListener("click", (e) => {
-        if (e.target.closest("#ring")) return;
+  box.addEventListener('click', (e) => {
+    /* Don't toggle if user clicked ring or buttons */
+    if (e.target.closest('#ring'))              return;
+    if (e.target.closest('.choice-container'))  return;
+    if (e.target.closest('.promise-text'))      return;
 
-        box.classList.toggle("open");
+    const wasOpen = box.classList.contains('open');
+    box.classList.toggle('open');
 
-        if (box.classList.contains("open")) {
-            fadeIn(music);
-        } else {
-            fadeOut(music);
-            ring.classList.remove("spinning");
-        }
-    });
+    if (!wasOpen) {
+      /* Opening */
+      fadeIn(music);
+      burstSparkles(e);
+      saveMusicState();
 
-    ring.addEventListener("click", (e) => {
-        e.stopPropagation();
-        if (box.classList.contains("open")) {
-            ring.classList.toggle("spinning");
-        }
-    });
+      /* Fire custom event so ring.html script knows it opened */
+      document.dispatchEvent(new CustomEvent('boxOpened'));
+    } else {
+      /* Closing */
+      fadeOut(music);
+      ring.classList.remove('spinning');
+    }
+  });
+
+  /* Click ring to spin */
+  ring.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (box.classList.contains('open')) {
+      ring.classList.toggle('spinning');
+    }
+  });
 }
 
-/* -------- SAVE BEFORE PAGE CHANGE -------- */
-window.addEventListener("beforeunload", saveMusicState);
+window.addEventListener('beforeunload', saveMusicState);
+
+/* ── Sparkle burst on open ── */
+function burstSparkles(e) {
+  const BURST = ['✨','💫','🌸','💕','🌟','💖'];
+  for (let i = 0; i < 18; i++) {
+    setTimeout(() => {
+      const sp = document.createElement('div');
+      sp.className = 'burst-sparkle';
+      sp.textContent = BURST[Math.floor(Math.random() * BURST.length)];
+      const angle = (i / 18) * Math.PI * 2;
+      const dist  = 50 + Math.random() * 100;
+      sp.style.cssText = `
+        position:fixed; z-index:999; pointer-events:none;
+        left:${e.clientX}px; top:${e.clientY}px;
+        font-size:${.8 + Math.random() * .7}rem;
+        --tx:${Math.cos(angle) * dist}px;
+        --ty:${Math.sin(angle) * dist}px;
+        animation:burstFly ${.6 + Math.random() * .4}s ease forwards;
+      `;
+      document.body.appendChild(sp);
+      setTimeout(() => sp.remove(), 1100);
+    }, i * 30);
+  }
+}
+
